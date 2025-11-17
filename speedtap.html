@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SpeedTap — Save Quest</title>
+  <link rel="stylesheet" href="speedtap.css">
+</head>
+<body>
+  <!-- Floating icons background -->
+  <div class="bg-icons" aria-hidden="true">
+    <!-- many icons; JS will randomize positions -->
+    <i class="icon">★</i><i class="icon">✦</i><i class="icon">✧</i><i class="icon">●</i><i class="icon">◆</i>
+    <i class="icon">★</i><i class="icon">✦</i><i class="icon">✧</i><i class="icon">●</i><i class="icon">◆</i>
+    <i class="icon">★</i><i class="icon">✦</i><i class="icon">✧</i><i class="icon">●</i><i class="icon">◆</i>
+    <i class="icon">★</i><i class="icon">✦</i><i class="icon">✧</i><i class="icon">●</i><i class="icon">◆</i>
+    <i class="icon">★</i><i class="icon">✦</i><i class="icon">✧</i><i class="icon">●</i><i class="icon">◆</i>
+  </div>
+
+  <main class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">SQ</div>
+        <div class="title">SpeedTap</div>
+      </div>
+      <div class="status-pill">Coins: <strong id="coinCount">0</strong></div>
+    </header>
+
+    <section class="game-area glass">
+      <div class="left-panel">
+        <div class="panel-title">Tap Power</div>
+        <div class="controls">
+          <label>Duration:</label>
+          <div class="duration-group">
+            <button class="dur-btn" data-sec="5">5s</button>
+            <button class="dur-btn active" data-sec="10">10s</button>
+            <button class="dur-btn" data-sec="20">20s</button>
+          </div>
+          <div class="settings-row">
+            <button id="startBtn" class="btn primary">Start</button>
+            <button id="resetBtn" class="btn ghost">Reset</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><small>Time Left</small><div id="timeLeft" class="big">00.0</div></div>
+          <div class="stat"><small>Score</small><div id="score" class="big">0</div></div>
+          <div class="stat"><small>Best</small><div id="best" class="big">0</div></div>
+        </div>
+
+        <div class="leaderboard glass small">
+          <h4>Leaderboard</h4>
+          <ol id="leaderboard"></ol>
+        </div>
+      </div>
+
+      <div class="center-panel">
+        <div class="tap-zone" id="tapZone" role="button" tabindex="0" aria-label="Tap button">
+          <div id="tapBtn" class="tap-btn">TAP</div>
+        </div>
+        <div class="hint">Tap as fast as you can — spacebar also works</div>
+      </div>
+
+      <aside class="right-panel">
+        <div class="info glass">
+          <h3>How to play</h3>
+          <p>Choose a duration, press Start, then tap the big button as fast as possible. Set a new best to win coins!</p>
+          <p class="mini">New high score → +50 coins (stored locally)</p>
+        </div>
+
+        <canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+      </aside>
+    </section>
+  </main>
+
+  <script src="speedtap.js"></script>
+</body>
+</html>
