@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Memory Match — Save Quest</title>
+<style>
+  :root{
+    --bg1:#3e7e78; --bg2:#861e5e; --bg3:#111827;
+    --glass: rgba(255,255,255,0.06);
+    --card-w: 110px;
+    --card-h: 140px;
+    --accent: linear-gradient(90deg,#ff7a9a,#6be1ff);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter, Poppins, system-ui, -apple-system;}
+  body{
+    background: linear-gradient(135deg,var(--bg1), var(--bg2) 55%, var(--bg3));
+    background-size:300% 300%;
+    animation: bgMove 12s ease-in-out infinite;
+    display:flex;align-items:center;justify-content:center;padding:24px;color:#fff;
+  }
+  @keyframes bgMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+  /* floating icons */
+  .bg-icons{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .bg-icons .icon{ position:absolute; color:rgba(255,255,255,0.08); font-size:28px; animation: float 6s ease-in-out infinite; user-select:none; }
+  @keyframes float{0%{transform:translateY(0) scale(1);opacity:0.18}50%{transform:translateY(-40px) scale(1.3);opacity:0.9}100%{transform:translateY(0) scale(1);opacity:0.18}}
+
+  /* shell */
+  .wrap{ position:relative; z-index:2; width:100%; max-width:980px; margin:auto; }
+  .top{ display:flex; align-items:center; gap:16px; justify-content:space-between; margin-bottom:14px; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .logo{ width:56px;height:56px;border-radius:12px;background:linear-gradient(90deg,#ff8aa4,#7be6ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;box-shadow:0 10px 40px rgba(0,0,0,0.25); }
+  .title{ font-weight:800; font-size:22px; letter-spacing:1px; color:#fff; }
+  .coin-pill{ margin-left:auto; background: rgba(255,255,255,0.12); padding:8px 12px; border-radius:999px; font-weight:800; color:#fff; box-shadow:0 8px 26px rgba(0,0,0,0.28); }
+
+  /* controls */
+  .controls{ display:flex; gap:10px; align-items:center; margin-bottom:16px; }
+  .btn{ padding:10px 14px; border-radius:12px; border:0; cursor:pointer; font-weight:700; background:var(--accent); color:#fff; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
+  .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,0.08); color:#fff; box-shadow:none; }
+
+  /* board */
+  .board-wrapper{ display:flex; gap:20px; align-items:flex-start; }
+  .board{ display:grid; grid-template-columns: repeat(6, var(--card-w)); gap:14px; width: calc(var(--card-w)*6 + 14px*5); justify-content:center; }
+  @media (max-width:980px){ .board{ grid-template-columns: repeat(4, var(--card-w)); width:auto; } }
+  @media (max-width:560px){ .board{ grid-template-columns: repeat(3, calc(var(--card-w) - 18px)); gap:10px; } }
+
+  /* card */
+  .card{
+    width:var(--card-w);
+    height:var(--card-h);
+    perspective:1000px;
+  }
+  .inner{
+    width:100%; height:100%;
+    transform-style:preserve-3d;
+    transition: transform .5s cubic-bezier(.2,.9,.3,1);
+    cursor:pointer;
+    border-radius:12px;
+  }
+  .flipped .inner{ transform: rotateY(180deg); }
+
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  }
+  .front{
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    color: rgba(255,255,255,0.95);
+    transform: rotateY(0deg);
+    font-size:28px;
+    font-weight:800;
+  }
+  .back{
+    transform: rotateY(180deg);
+    background: linear-gradient(90deg,#ffffff11,#ffffff05);
+  }
+  .matched .inner{ box-shadow: 0 20px 40px rgba(0,0,0,0.5); outline: 2px solid rgba(255,255,255,0.06); transform: scale(1.02); }
+
+  /* stat panel */
+  .panel{
+    width:260px; min-width:220px; padding:16px; border-radius:14px; background: rgba(255,255,255,0.04); backdrop-filter: blur(6px);
+    border:1px solid rgba(255,255,255,0.05); color:#fff;
+  }
+  .panel h3{ margin:0 0 10px 0; font-size:18px; }
+  .stat{ font-weight:700; margin:6px 0; }
+  .hint{ font-size:13px; opacity:0.9; margin-top:10px; color:#ddd; }
+
+  /* confetti canvas */
+  .confetti{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+
+  /* small messages */
+  .msg{ margin-top:10px; font-weight:800; color:#ffd166; min-height:20px; }
+
+</style>
+</head>
+<body>
+
+<!-- floating icons -->
+<div class="bg-icons" aria-hidden="true">
+  <!-- many icons; JS will randomize positions -->
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+  <i class="icon">★</i><i class="icon">◆</i><i class="icon">●</i><i class="icon">✦</i><i class="icon">✧</i>
+</div>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="logo">SQ</div>
+      <div>
+        <div class="title">Memory Match</div>
+        <div style="opacity:0.9;font-size:13px">Match pairs — win coins!</div>
+      </div>
+    </div>
+    <div class="coin-pill">Coins: <span id="coinCount">0</span></div>
+  </div>
+
+  <div class="controls">
+    <button id="newBtn" class="btn">New Game</button>
+    <button id="shuffleBtn" class="btn ghost">Shuffle</button>
+    <button id="resetCoins" class="btn ghost">Reset Coins</button>
+    <div style="margin-left:12px;color:#fff;font-weight:700">Moves: <span id="moves">0</span></div>
+    <div style="margin-left:12px;color:#fff;font-weight:700">Time: <span id="timer">00:00</span></div>
+  </div>
+
+  <div class="board-wrapper">
+    <div id="board" class="board" aria-live="polite"></div>
+
+    <aside class="panel">
+      <h3>Game Info</h3>
+      <div class="stat">Pairs: <strong id="pairsFound">0</strong> / 6</div>
+      <div class="stat">Best Moves: <span id="bestMoves">—</span></div>
+      <div class="msg" id="message"></div>
+      <div class="hint">Tip: Remember positions — complete all pairs to win +50 coins.</div>
+      <canvas id="confetti" class="confetti"></canvas>
+    </aside>
+  </div>
+</div>
+
+<script>
+/* Memory Match Game - single-file
+   - 6 pairs (12 cards)
+   - flip, match logic, timer, move counter
+   - +50 coins on win saved to localStorage
+   - confetti on win
+*/
+
+(function(){
+  const ICONS = [
+    // simple SVG markup strings (safe, consistent look)
+    '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="4" fill="#FF6B6B"/></svg>',
+    '<svg width="48" height="48" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FFD166"/></svg>',
+    '<svg width="48" height="48" viewBox="0 0 24 24"><polygon points="12,2 15,11 23,11 17,16 19,23 12,19 5,23 7,16 1,11 9,11" fill="#6BE1FF"/></svg>',
+    '<svg width="48" height="48" viewBox="0 0 24 24"><path d="M12 2 L15 8 L22 9 L17 14 L18 21 L12 18 L6 21 L7 14 L2 9 L9 8 Z" fill="#A78BFA"/></svg>',
+    '<svg width="48" height="48" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" fill="#FF9F43"/></svg>',
+    '<svg width="48" height="48" viewBox="0 0 24 24"><path d="M12 2 L20 20 H4 Z" fill="#7AF08A"/></svg>'
+  ];
+
+  const boardEl = document.getElementById('board');
+  const movesEl = document.getElementById('moves');
+  const timerEl = document.getElementById('timer');
+  const coinCountEl = document.getElementById('coinCount');
+  const pairsFoundEl = document.getElementById('pairsFound');
+  const messageEl = document.getElementById('message');
+  const bestMovesEl = document.getElementById('bestMoves');
+  const confettiCanvas = document.getElementById('confetti');
+
+  const newBtn = document.getElementById('newBtn');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const resetCoinsBtn = document.getElementById('resetCoins');
+
+  let state = {
+    deck: [],         // shuffled array of icons (length 12)
+    flipped: [],      // indices currently flipped
+    matched: [],      // indices matched
+    moves: 0,
+    pairsFound: 0,
+    timer: 0,
+    timerInterval: null,
+    coins: Number(localStorage.getItem('coins') || 0)
+  };
+
+  coinCountEl.textContent = state.coins;
+
+  // prepare confetti canvas
+  const ctx = confettiCanvas.getContext ? confettiCanvas.getContext('2d') : null;
+  function resizeCanvas(){ confettiCanvas.width = confettiCanvas.clientWidth; confettiCanvas.height = confettiCanvas.clientHeight; }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  // randomize floating icons positions:
+  document.querySelectorAll('.bg-icons .icon').forEach(el=>{
+    el.style.left = (Math.random()*100) + '%';
+    el.style.top = (Math.random()*100) + '%';
+    el.style.fontSize = (14 + Math.random()*42) + 'px';
+    el.style.opacity = (0.05 + Math.random()*0.25).toString();
+    el.style.animationDelay = (Math.random()*5) + 's';
+  });
+
+  // build deck (pairs)
+  function buildDeck(){
+    const pairs = ICONS.slice(0,6); // 6 unique
+    const deck = pairs.concat(pairs).map((icon, idx)=>({ id: idx, icon }));
+    shuffleArray(deck);
+    state.deck = deck;
+  }
+
+  function shuffleArray(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+  }
+
+  function renderBoard(){
+    boardEl.innerHTML = '';
+    state.deck.forEach((card, idx) => {
+      const cardEl = document.createElement('div');
+      cardEl.className = 'card';
+      if(state.matched.includes(idx)) cardEl.classList.add('matched');
+      if(state.flipped.includes(idx)) cardEl.classList.add('flipped');
+
+      cardEl.innerHTML = `
+        <div class="inner">
+          <div class="face front">${card.icon}</div>
+          <div class="face back">${card.icon}</div>
+        </div>
+      `;
+      cardEl.addEventListener('click', () => onCardClick(idx));
+      boardEl.appendChild(cardEl);
+    });
+  }
+
+  // click handler
+  function onCardClick(idx){
+    if(state.matched.includes(idx)) return;
+    if(state.flipped.includes(idx)) return;
+    if(state.flipped.length === 2) return; // wait while checking
+
+    // start timer on first move
+    if(state.moves === 0 && state.timerInterval === null) startTimer();
+
+    state.flipped.push(idx);
+    renderBoard();
+
+    if(state.flipped.length === 2){
+      state.moves++;
+      movesEl.textContent = state.moves;
+      const [a,b] = state.flipped;
+      const same = state.deck[a].icon === state.deck[b].icon;
+      if(same){
+        state.matched.push(a,b);
+        state.pairsFound++;
+        pairsFoundEl.textContent = state.pairsFound;
+        state.flipped = [];
+        // mark matched animation
+        setTimeout(()=> {
+          renderBoard();
+          if(state.pairsFound === ICONS.length) onWin();
+        }, 250);
+      } else {
+        // flip back after delay
+        setTimeout(()=> {
+          state.flipped = [];
+          renderBoard();
+        }, 700);
+      }
+    }
+  }
+
+  // win logic
+  function onWin(){
+    stopTimer();
+    messageEl.textContent = 'You matched all pairs! +50 coins';
+    awardCoins(50);
+    // confetti burst
+    burstConfetti();
+    // store best moves
+    const prevBest = Number(localStorage.getItem('bestMoves') || 0);
+    if(prevBest === 0 || state.moves < prevBest){
+      localStorage.setItem('bestMoves', state.moves);
+      bestMovesEl.textContent = state.moves;
+    } else {
+      bestMovesEl.textContent = prevBest;
+    }
+    // clear message after a bit
+    setTimeout(()=> messageEl.textContent = '', 3500);
+  }
+
+  function awardCoins(n){
+    state.coins += n;
+    localStorage.setItem('coins', state.coins);
+    coinCountEl.textContent = state.coins;
+  }
+
+  // timer
+  function startTimer(){
+    state.timerInterval = setInterval(()=> {
+      state.timer++;
+      timerEl.textContent = timeStr(state.timer);
+    }, 1000);
+  }
+  function stopTimer(){
+    if(state.timerInterval) clearInterval(state.timerInterval);
+    state.timerInterval = null;
+  }
+  function resetTimer(){ stopTimer(); state.timer = 0; timerEl.textContent = '00:00'; }
+
+  function timeStr(sec){
+    const m = String(Math.floor(sec/60)).padStart(2,'0');
+    const s = String(sec%60).padStart(2,'0');
+    return `${m}:${s}`;
+  }
+
+  // new game
+  function newGame(){
+    stopTimer();
+    state.moves = 0;
+    state.pairsFound = 0;
+    state.flipped = [];
+    state.matched = [];
+    state.timer = 0;
+    movesEl.textContent = 0;
+    pairsFoundEl.textContent = 0;
+    resetTimer();
+    messageEl.textContent = '';
+    buildDeck();
+    renderBoard();
+  }
+
+  // shuffle current layout (reshuffle icons)
+  function shuffleGame(){
+    shuffleArray(state.deck);
+    state.flipped = [];
+    state.matched = [];
+    state.moves = 0;
+    state.pairsFound = 0;
+    movesEl.textContent = 0;
+    pairsFoundEl.textContent = 0;
+    resetTimer();
+    renderBoard();
+  }
+
+  // confetti burst (canvas inside panel)
+  function burstConfetti(){
+    if(!ctx) return;
+    const W = confettiCanvas.width = confettiCanvas.clientWidth;
+    const H = confettiCanvas.height = confettiCanvas.clientHeight;
+    const pieces = [];
+    const colors = ['#FF6B6B','#FFD166','#6BE1FF','#A78BFA','#FF9F43'];
+    for(let i=0;i<48;i++){
+      pieces.push({
+        x: W/2 + (Math.random()-0.5)*(W*0.5),
+        y: H/2 + (Math.random()-0.5)*(H*0.5),
+        vx: (Math.random()-0.5)*8,
+        vy: - (Math.random()*8 + 1),
+        rot: Math.random()*360,
+        vr: (Math.random()-0.5)*8,
+        size: 6 + Math.random()*10,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        life: 0
+      });
+    }
+    let last = performance.now();
+    function frame(t){
+      const dt = (t-last)/1000;
+      last = t;
+      ctx.clearRect(0,0,W,H);
+      for(let p of pieces){
+        p.life += dt;
+        p.vy += 18*dt;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr*dt;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+      }
+      if(pieces[0].life < 1.6) requestAnimationFrame(frame);
+      else ctx.clearRect(0,0,W,H);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  // reset coins
+  resetCoinsBtn.addEventListener('click', ()=> {
+    state.coins = 0; localStorage.setItem('coins', 0);
+    coinCountEl.textContent = 0;
+    messageEl.textContent = 'Coins reset';
+    setTimeout(()=> messageEl.textContent = '', 1400);
+  });
+
+  newBtn.addEventListener('click', newGame);
+  shuffleBtn.addEventListener('click', shuffleGame);
+
+  // load best moves
+  const prevBest = localStorage.getItem('bestMoves');
+  bestMovesEl.textContent = prevBest ? prevBest : '—';
+
+  // initial start
+  newGame();
+
+  // expose for debugging (optional)
+  window._memoryState = state;
+
+})();
+</script>
+</body>
+</html>
