@@ -1,0 +1,178 @@
+:root {
+  --gradient: linear-gradient(135deg,#8f1f1f,#aa2783,#3e7e78, #861e5e, #111827);
+  --box1: linear-gradient(135deg,#89f7fe,#d61a88);
+  --box2: linear-gradient(135deg, #21d1ba, #764ba2);
+  --box3: linear-gradient(135deg,#8dda2a,#21cfa9);
+}
+
+* { box-sizing: border-box; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  background: var(--gradient);
+  background-size: 400% 400%;
+  animation: bgFlow 15s ease infinite;
+}
+.box {
+  width: 250px;
+  height: 150px;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+  border-radius: 20px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: black; /* ✅ text color changed here */
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes bgFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ---------- HERO SECTION ---------- */
+.hero {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.logo-section { margin-bottom: 2rem; }
+.logo {
+  width: 90px;
+  height: 90px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 4px;
+  margin: 0.5rem 0;
+  background: linear-gradient(90deg,#ff9a9e,#c90a89,#d83f6d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.sub-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #FFD700, #ff6ec4, #00c6ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: blink 1.5s infinite;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; transform: translateY(0); }
+  50% { opacity: 0.7; transform: translateY(-6px); }
+}
+
+/* ---------- FEATURE CARDS ---------- */
+.feature-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-card {
+  width: 230px;
+  padding: 25px 18px;
+  border-radius: 20px;
+  color: #610909;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  background: var(--box1);
+}
+.feature-card:nth-child(2) { background: var(--box2); }
+.feature-card:nth-child(3) { background: var(--box3); }
+
+.feature-card:hover { transform: scale(1.08); }
+
+.feature-card .icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  animation: bounce 2.5s infinite;
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ---------- GET STARTED BUTTON ---------- */
+ .get-started-btn {
+  display: inline-block;
+  padding: 15px 40px;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #ff758c, #ff7eb3, #fad0c4);
+  background-size: 300% 300%;
+  animation: gradientFlow 3s ease infinite;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+.get-started-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+@keyframes colorShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.start-btn:hover { transform: scale(1.05); }
+/* ---------- BUBBLE CANVAS ---------- */
+#bubbleCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+/* ===== FLOATING BACKGROUND ICONS ===== */
+.bg-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 0; /* stays behind all UI */
+}
+
+.bg-icons i {
+  position: absolute;
+  font-size: 40px;
+  color: rgba(255, 255, 255, 0.12);
+  animation: floatIcon 6s infinite ease-in-out;
+}
+
+@keyframes floatIcon {
+  0% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-40px) scale(1.25); opacity: 0.7; }
+  100% { transform: translateY(0) scale(1); opacity: 0.3; }
+}
