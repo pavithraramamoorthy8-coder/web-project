@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Save Quest - Sign Up</title>
+  <link rel="stylesheet" href="signup.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <canvas id="bubbleCanvas"></canvas>
+
+  <div class="signup-container">
+    <div class="logo-area">
+      <img src="https://cdn-icons-png.flaticon.com/512/906/906343.png" alt="Save Quest Logo" class="logo">
+      <h1 class="title">Save Quest</h1>
+      <p class="subtitle">Join the Adventure — Start Saving Smarter!</p>
+    </div>
+
+    <form id="signupForm">
+      <input type="text" placeholder="Full Name" required />
+      <input type="email" placeholder="Email Address" required />
+      <input type="text" placeholder="Username" required />
+      <input type="password" placeholder="Password" required />
+      <input type="password" placeholder="Confirm Password" required />
+      <button type="submit" id="signupBtn">Sign Up</button>
+    </form>
+
+    <p class="login-text">Already have an account? <a href="login.html">Login Here</a></p>
+  </div>
+
+  <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+  <script src="signup.js"></script>
+</body>
+</html>
