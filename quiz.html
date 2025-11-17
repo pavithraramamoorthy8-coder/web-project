@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Save Quest — Quiz</title>
+  <link rel="stylesheet" href="quiz.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+  <div class="bg-icons" id="iconContainer"></div>
+  <div class="quiz-container">
+    <header>
+      <button id="backBtn" class="icon-btn"><i class="ri-arrow-left-line"></i></button>
+      <h1>Quiz Challenge</h1>
+    </header>
+
+    <main id="quizMain">
+      <div id="startScreen" class="screen active">
+        <h2>Ready to test your skills?</h2>
+        <button id="startBtn" class="btn">Start Quiz</button>
+      </div>
+
+      <div id="quizScreen" class="screen hidden">
+        <h2 id="quizTitle"></h2>
+        <div id="questionBox">
+          <p id="questionText"></p>
+          <div id="optionsBox"></div>
+        </div>
+        <div class="quiz-footer">
+          <span id="progressText"></span>
+          <button id="nextBtn" class="btn">Next</button>
+        </div>
+      </div>
+
+      <div id="resultScreen" class="screen hidden">
+        <h2>Quiz Completed!</h2>
+        <p id="scoreText"></p>
+        <button id="retryBtn" class="btn">Retry</button>
+        <button id="backDashboard" class="btn outline">Back to Dashboard</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="quiz-data.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>
