@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Reward — Save Quest</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="daily.css">
+</head>
+<body>
+  <div class="bg-icons" id="iconContainer"></div>
+  <!-- Back Button -->
+  <button class="back-btn" onclick="window.location.href='dashboard.html'">
+    <i class="ri-arrow-left-line"></i> Back
+  </button>
+
+  <div class="container">
+    <h1 class="title">🎁 Daily Reward</h1>
+    <p class="subtitle">Come back every day to earn bonus coins!</p>
+
+    <div class="reward-card">
+      <i class="ri-gift-line reward-icon"></i>
+      <p id="rewardMsg">Claim your daily bonus!</p>
+      <button id="claimBtn">Claim +100 Coins</button>
+    </div>
+  </div>
+
+  <canvas id="coinCanvas"></canvas>
+
+  <script src="daily.js"></script>
+</body>
+</html>
