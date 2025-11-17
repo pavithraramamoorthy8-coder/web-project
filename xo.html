@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XO Game</title>
+    <link rel="stylesheet" href="xo.css">
+</head>
+<body>
+ <div class="bg-icons" id="iconContainer"></div>
+<header>
+    <h1 class="title">Tic Tac Toe</h1>
+</header>
+
+<!-- MODE BUTTONS CENTER -->
+<div class="mode-container">
+    <button class="mode-btn" onclick="setMode('pvp')">Player vs Player</button>
+    <button class="mode-btn" onclick="setMode('ai-easy')">AI - Easy</button>
+    <button class="mode-btn" onclick="setMode('ai-hard')">AI - Hard</button>
+</div>
+
+<div class="game-wrapper">
+
+    <!-- LEFT: GAME BOARD -->
+    <div class="board glass">
+        <div class="cell" onclick="makeMove(0)"></div>
+        <div class="cell" onclick="makeMove(1)"></div>
+        <div class="cell" onclick="makeMove(2)"></div>
+        <div class="cell" onclick="makeMove(3)"></div>
+        <div class="cell" onclick="makeMove(4)"></div>
+        <div class="cell" onclick="makeMove(5)"></div>
+        <div class="cell" onclick="makeMove(6)"></div>
+        <div class="cell" onclick="makeMove(7)"></div>
+        <div class="cell" onclick="makeMove(8)"></div>
+    </div>
+
+    <!-- RIGHT: SCOREBOARD -->
+    <div class="score glass">
+        <h2>Score Board</h2>
+        <p>Player X: <span id="scoreX">0</span></p>
+        <p>Player O: <span id="scoreO">0</span></p>
+        <p>Draw: <span id="draws">0</span></p>
+    </div>
+
+</div>
+
+<script src="xo.js"></script>
+</body>
+</html>
