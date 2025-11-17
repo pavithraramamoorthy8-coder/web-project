@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Save Quest — Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <!-- Remix icons CDN for simple icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+  <!-- bubble canvas (drawn by JS) -->
+  <canvas id="bubbleCanvas" aria-hidden="true"></canvas>
+<div class="bg-icons" id="iconContainer"></div>
+  <div class="shell">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="top-left">
+        <button id="settingsBtn" class="icon-btn" title="Settings"><i class="ri-settings-5-line"></i></button>
+      </div>
+
+      <div class="brand">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906343.png" alt="logo" class="logo" />
+      </div>
+
+      <div class="top-right">
+        <div class="coin-pill" title="Coins">
+          <i class="ri-coin-line"></i>
+          <span id="coinCount">0</span>
+        </div>
+        <button id="profileBtn" class="icon-btn" title="Profile"><i class="ri-user-3-line"></i></button>
+      </div>
+    </header>
+
+    <!-- TITLE -->
+    <main class="main-area">
+      <h1 class="title">SAVE QUEST</h1>
+      <p class="subtitle">Save Smart · Play Hard · Earn Rewards</p>
+
+      <!-- CARDS GRID -->
+      <section class="cards" id="cardsGrid">
+        <article class="card" data-target="quiz.html" id="card-quiz">
+          <div class="card-icon"><i class="ri-question-answer-line"></i></div>
+          <h3>Quiz</h3>
+          <p>Test your financial IQ</p>
+        </article>
+
+        <article class="card" data-target="games.html" id="card-games">
+          <div class="card-icon"><i class="ri-gamepad-line"></i></div>
+          <h3>Games</h3>
+          <p>XO · Puzzle · Shuffle</p>
+        </article>
+
+        <article class="card" data-target="education.html" id="card-education">
+          <div class="card-icon"><i class="ri-book-open-line"></i></div>
+          <h3>Education</h3>
+          <p>Financial literacy</p>
+        </article>
+
+        <article class="card" data-target="tutorial.html" id="card-tutorial">
+          <div class="card-icon"><i class="ri-video-line"></i></div>
+          <h3>Tutorial</h3>
+          <p>How to play</p>
+        </article>
+
+        <article class="card" data-target="about.html" id="card-about">
+          <div class="card-icon"><i class="ri-information-line"></i></div>
+          <h3>About Us</h3>
+          <p>Meet the team</p>
+        </article>
+
+        <article class="card" data-target="challange.html" id="card-education">
+          <div class="card-icon"><i class="ri-trophy-line"></i></div>
+          <h3>challange</h3>
+          <p>Win this</p>
+        </article>
+      </section>
+
+      <!-- BOTTOM ACTIONS -->
+      <div class="bottom-actions">
+        <button id="dailyBtn" class="action-pill left-pill"><i class="ri-gift-line"></i><span>Daily Reward</span></button>
+        <button id="spinBtn" class="action-pill right-pill"><i class="ri-refresh-line"></i><span>Spin & Win</span></button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Daily Reward Modal -->
+  <div id="dailyModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-card">
+      <h2>Daily Reward</h2>
+      <p id="dailyMsg">Claim your daily bonus!</p>
+      <div class="modal-actions">
+        <button id="claimDailyBtn" class="btn green">Claim +100</button>
+        <button id="closeDailyBtn" class="btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- optional click sound (uncomment and set src if you want) -->
+  <!-- <audio id="clickSound" src="click.mp3" preload="auto"></audio> -->
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
